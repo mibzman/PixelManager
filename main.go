@@ -8,13 +8,16 @@ import (
 )
 
 type Sprite struct {
-	Name   string
-	Gender int
+	Name string
 
-	SkinColor  color.RGBA
+	SkinColor color.RGBA
+	EyeColor  color.RGBA
+
+	HasBeard   bool
 	BeardColor color.RGBA
-	EyeColor   color.RGBA
+
 	HairColor  color.RGBA
+	HairLength int
 
 	Image *image.RGBA
 }
@@ -78,7 +81,11 @@ func (Sprite Sprite) drawBeard() {
 	hair[13] = []int{5, 6, 7}
 	hair[14] = []int{5, 6, 7}
 
-	ColorMap(hair, Sprite.BeardColor, Sprite.Image.Set)
+	if Sprite.HasBeard {
+		ColorMap(hair, Sprite.BeardColor, Sprite.Image.Set)
+	} else {
+		ColorMap(hair, Sprite.SkinColor, Sprite.Image.Set)
+	}
 }
 
 func (Sprite Sprite) drawHair() {
@@ -91,14 +98,20 @@ func (Sprite Sprite) drawHair() {
 	hair[4] = []int{0, 1, 2, 11}
 	hair[5] = []int{0, 11}
 
-	if Sprite.Gender == 1 {
+	if Sprite.HairLength >= 1 {
 		hair[6] = []int{11}
 		hair[7] = []int{11}
 		hair[8] = []int{0, 11}
+	}
+
+	if Sprite.HairLength >= 2 {
 		hair[9] = []int{0, 11}
 		hair[10] = []int{0, 11}
 		hair[11] = []int{0, 11}
 		hair[12] = []int{0, 11}
+	}
+
+	if Sprite.HairLength >= 3 {
 		hair[13] = []int{0, 10, 11}
 		hair[14] = []int{0, 9, 10, 11}
 		hair[15] = []int{0, 8, 9, 10, 11}
@@ -154,6 +167,13 @@ func (Sprite Sprite) drawHead() {
 	}
 
 	ColorMap(Head, black, Sprite.Image.Set)
+
+	Lipp := make(map[int]([]int))
+	Lipp[11] = []int{5, 6, 7}
+
+	lippColor := color.RGBA{129, 57, 53, 255}
+
+	ColorMap(Lipp, lippColor, Sprite.Image.Set)
 }
 
 func ColorMap(points map[int]([]int), color color.RGBA, fun func(int, int, color.Color)) {
@@ -214,27 +234,25 @@ func main() {
 		color.RGBA{74, 108, 110, 255},
 		color.RGBA{71, 98, 105, 255},
 		color.RGBA{65, 97, 86, 255},
-		color.RGB`A{67, 101, 128, 255},
+		color.RGBA{67, 101, 128, 255},
 		color.RGBA{44, 76, 99, 255},
 	}
 
-	// Genders := []int{0, 1}
+	// BeardHaving := []bool{true, false, false}
 
 	// Count := 0
 
 	// for _, Gender := range Genders {
-	// 	for _, Gender := range Genders {
-
-	// 	}
 	// }
 
 	MySprite := Sprite{
 		Name:       "bob",
-		SkinColor:  Skins[1],
-		HairColor:  Hairs[7],
-		BeardColor: Hairs[4],
-		EyeColor:   Eyes[9],
-		Gender:     0,
+		SkinColor:  Skins[2],
+		HairColor:  Hairs[2],
+		BeardColor: Hairs[0],
+		EyeColor:   Eyes[4],
+		HasBeard:   true,
+		HairLength: 2,
 	}
 
 	MySprite.Generate()
