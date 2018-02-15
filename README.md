@@ -1,2 +1,2 @@
-# PixelManager
-A simple pixel manager
+# Pixel Person Generator
+A tool that generates pixel people
