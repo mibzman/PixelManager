@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	"image/png"
@@ -9,11 +8,20 @@ import (
 )
 
 type Sprite struct {
+	Name   string
+	Gender int
+
 	SkinColor  color.RGBA
 	BeardColor color.RGBA
 	EyeColor   color.RGBA
 	HairColor  color.RGBA
-	Image      *image.RGBA
+
+	Image *image.RGBA
+}
+
+func (Sprite Sprite) Generate() error {
+	Image := Sprite.Draw()
+	return Print(Sprite.Name, Image)
 }
 
 func (Sprite Sprite) Draw() *image.RGBA {
@@ -21,22 +29,86 @@ func (Sprite Sprite) Draw() *image.RGBA {
 	Sprite.Image = image.NewRGBA(image.Rect(0, 0, width, height))
 
 	Sprite.drawHead()
-	// Sprite.drawBeard()
-	// Sprite.drawEye()
-	// Sprite.drawHair()
+	Sprite.drawBeard()
+	Sprite.drawHair()
+	Sprite.drawEyes()
 
 	return Sprite.Image
 }
 
-type Pixel struct {
-	X     int
-	Y     int
-	Color color.RGBA
+func Print(Name string, Image *image.RGBA) error {
+	f, err := os.OpenFile(Name+".png", os.O_WRONLY|os.O_CREATE, 0600)
+	defer f.Close()
+	png.Encode(f, Image)
+	return err
+}
+
+func (Sprite Sprite) drawEyes() {
+	pupils := make(map[int]([]int))
+	pupils[6] = []int{3, 8}
+
+	black := color.RGBA{0, 0, 0, 255}
+
+	ColorMap(pupils, black, Sprite.Image.Set)
+
+	iris1 := make(map[int]([]int))
+	iris1[5] = []int{3, 4, 8, 9}
+
+	ColorMap(iris1, Sprite.EyeColor, Sprite.Image.Set)
+
+	iris2 := make(map[int]([]int))
+	iris2[6] = []int{4, 9}
+
+	iris2Color := color.RGBA{
+		Sprite.EyeColor.R + 15,
+		Sprite.EyeColor.G + 15,
+		Sprite.EyeColor.B + 15,
+		255,
+	}
+
+	ColorMap(iris2, iris2Color, Sprite.Image.Set)
+}
+
+func (Sprite Sprite) drawBeard() {
+	hair := make(map[int]([]int))
+
+	hair[10] = []int{4, 5, 6, 7, 8}
+	hair[11] = []int{4, 8}
+	hair[12] = []int{4, 5, 6, 7, 8}
+	hair[13] = []int{5, 6, 7}
+	hair[14] = []int{5, 6, 7}
+
+	ColorMap(hair, Sprite.BeardColor, Sprite.Image.Set)
+}
+
+func (Sprite Sprite) drawHair() {
+	hair := make(map[int]([]int))
+
+	hair[0] = []int{3, 4, 5, 6, 7, 8}
+	hair[1] = []int{2, 3, 4, 5, 6, 7, 8, 9}
+	hair[2] = []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	hair[3] = []int{0, 1, 2, 3, 4, 10, 11}
+	hair[4] = []int{0, 1, 2, 11}
+	hair[5] = []int{0, 11}
+
+	if Sprite.Gender == 1 {
+		hair[6] = []int{11}
+		hair[7] = []int{11}
+		hair[8] = []int{0, 11}
+		hair[9] = []int{0, 11}
+		hair[10] = []int{0, 11}
+		hair[11] = []int{0, 11}
+		hair[12] = []int{0, 11}
+		hair[13] = []int{0, 10, 11}
+		hair[14] = []int{0, 9, 10, 11}
+		hair[15] = []int{0, 8, 9, 10, 11}
+		hair[16] = []int{0, 5, 6, 7, 8, 9, 10, 11}
+	}
+
+	ColorMap(hair, Sprite.HairColor, Sprite.Image.Set)
 }
 
 func (Sprite Sprite) drawHead() {
-	// Pixels := []Pixel
-
 	skin := make(map[int]([]int))
 
 	skin[3] = []int{5, 6, 7, 8, 9}
@@ -93,46 +165,19 @@ func ColorMap(points map[int]([]int), color color.RGBA, fun func(int, int, color
 }
 
 func main() {
-	// var width, height int = 12, 18
 
-	// outputImage := image.NewRGBA(image.Rect(0, 0, width, height))
-	// for x := 0; x < width; x++ {
-	// 	for y := 0; y < height; y++ {
-	// 		c := color.RGBA{
-	// 			255,
-	// 			255,
-	// 			255,
-	// 			255,
-	// 		}
-	// 		outputImage.Set(x, y, c)
-	// 	}
-	// }
+	Skin := color.RGBA{255, 200, 110, 255}
+	Hair := color.RGBA{144, 101, 60, 255}
+	Eye := color.RGBA{226, 153, 38, 255}
 
-	// c := color.RGBA{
-	// 	0,
-	// 	0,
-	// 	0,
-	// 	255,
-	// }
-
-	// outputImage.Set(0, 0, c)
-
-	Skin := color.RGBA{
-		255,
-		200,
-		110,
-		255,
+	MySprite := Sprite{
+		Name:       "bob",
+		SkinColor:  Skin,
+		HairColor:  Hair,
+		BeardColor: Hair,
+		EyeColor:   Eye,
+		Gender:     1,
 	}
 
-	MySprite := Sprite{SkinColor: Skin}
-
-	outputImage := MySprite.Draw()
-
-	f, err := os.OpenFile("rgb.png", os.O_WRONLY|os.O_CREATE, 0600)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer f.Close()
-	png.Encode(f, outputImage)
+	MySprite.Generate()
 }
