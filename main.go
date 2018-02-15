@@ -5,6 +5,7 @@ import (
 	"image/color"
 	"image/png"
 	"os"
+	"strconv"
 )
 
 type Sprite struct {
@@ -40,7 +41,7 @@ func (Sprite Sprite) Draw() *image.RGBA {
 }
 
 func Print(Name string, Image *image.RGBA) error {
-	f, err := os.OpenFile(Name+".png", os.O_WRONLY|os.O_CREATE, 0600)
+	f, err := os.OpenFile("characters/"+Name+".png", os.O_WRONLY|os.O_CREATE, 0600)
 	defer f.Close()
 	png.Encode(f, Image)
 	return err
@@ -238,22 +239,35 @@ func main() {
 		color.RGBA{44, 76, 99, 255},
 	}
 
-	// BeardHaving := []bool{true, false, false}
+	BeardHaving := []bool{true, false}
+	HairLengths := []int{0, 1, 2, 3}
 
-	// Count := 0
+	Count := 0
 
-	// for _, Gender := range Genders {
-	// }
+	for _, HasBeard := range BeardHaving {
+		for HairIndex, HairColor := range Hairs {
+			for _, Skin := range Skins {
+				for _, Eye := range Eyes {
+					for _, HairLength := range HairLengths {
+						BeardIndex := 0
+						if HasBeard && HairIndex > 0 {
+							BeardIndex = HairIndex - 1
+						}
 
-	MySprite := Sprite{
-		Name:       "bob",
-		SkinColor:  Skins[2],
-		HairColor:  Hairs[2],
-		BeardColor: Hairs[0],
-		EyeColor:   Eyes[4],
-		HasBeard:   true,
-		HairLength: 2,
+						MySprite := Sprite{
+							Name:       strconv.Itoa(Count),
+							SkinColor:  Skin,
+							HairColor:  HairColor,
+							BeardColor: Hairs[BeardIndex],
+							EyeColor:   Eye,
+							HasBeard:   HasBeard,
+							HairLength: HairLength,
+						}
+						Count++
+						MySprite.Generate()
+					}
+				}
+			}
+		}
 	}
-
-	MySprite.Generate()
 }
