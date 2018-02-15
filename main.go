@@ -165,18 +165,76 @@ func ColorMap(points map[int]([]int), color color.RGBA, fun func(int, int, color
 }
 
 func main() {
+	Skins := []color.RGBA{
+		color.RGBA{141, 85, 36, 255},
+		color.RGBA{198, 134, 66, 255},
+		color.RGBA{224, 172, 105, 255},
+		color.RGBA{241, 194, 125, 255},
+		color.RGBA{255, 219, 172, 255},
+	}
 
-	Skin := color.RGBA{255, 200, 110, 255}
-	Hair := color.RGBA{144, 101, 60, 255}
-	Eye := color.RGBA{226, 153, 38, 255}
+	Hairs := []color.RGBA{
+		color.RGBA{9, 8, 6, 255},
+		color.RGBA{113, 99, 90, 255},
+		color.RGBA{183, 166, 158, 255},
+		color.RGBA{214, 196, 194, 255},
+		color.RGBA{202, 191, 177, 255},
+		color.RGBA{220, 208, 186, 255},
+		color.RGBA{255, 245, 225, 255},
+		color.RGBA{222, 188, 153, 255},
+		color.RGBA{184, 151, 120, 255},
+		color.RGBA{165, 107, 70, 255},
+		color.RGBA{181, 82, 57, 255},
+		color.RGBA{141, 74, 67, 255},
+		color.RGBA{145, 85, 61, 255},
+		color.RGBA{83, 61, 50, 255},
+		color.RGBA{59, 48, 36, 255},
+		color.RGBA{85, 72, 56, 255},
+		color.RGBA{78, 67, 63, 255},
+		color.RGBA{106, 78, 66, 255},
+		color.RGBA{167, 133, 106, 255},
+		color.RGBA{151, 121, 97, 255},
+	}
+
+	Eyes := []color.RGBA{
+		color.RGBA{94, 72, 30, 255},
+		color.RGBA{84, 42, 14, 255},
+		color.RGBA{99, 57, 15, 255},
+		color.RGBA{96, 49, 1, 255},
+		color.RGBA{69, 24, 0, 255},
+		color.RGBA{75, 114, 72, 255},
+		color.RGBA{51, 122, 44, 255},
+		color.RGBA{25, 163, 55, 255},
+		color.RGBA{155, 240, 157, 255},
+		color.RGBA{238, 232, 170, 255},
+		color.RGBA{203, 206, 134, 255},
+		color.RGBA{168, 180, 97, 255},
+		color.RGBA{134, 153, 61, 255},
+		color.RGBA{99, 127, 25, 255},
+		color.RGBA{74, 108, 110, 255},
+		color.RGBA{71, 98, 105, 255},
+		color.RGBA{65, 97, 86, 255},
+		color.RGB`A{67, 101, 128, 255},
+		color.RGBA{44, 76, 99, 255},
+	}
+
+	// Genders := []int{0, 1}
+
+	// Count := 0
+
+	// for _, Gender := range Genders {
+	// 	for _, Gender := range Genders {
+
+	// 	}
+	// }
 
 	MySprite := Sprite{
 		Name:       "bob",
-		SkinColor:  Skin,
-		HairColor:  Hair,
-		BeardColor: Hair,
-		EyeColor:   Eye,
-		Gender:     1,
+		SkinColor:  Skins[1],
+		HairColor:  Hairs[7],
+		BeardColor: Hairs[4],
+		EyeColor:   Eyes[9],
+		Gender:     0,
 	}
 
 	MySprite.Generate()
