@@ -11,7 +11,7 @@ This tool defines a grid of pixels, and specefies which pixels on this grid are 
 - HairLength
 - BeardColor
 - HasBeard
-  - Sets beard color to shin color if true
+  - Sets beard color to skin color if true
 - EyeColor
 
 These settings can be used to generate a sprite.  For loops and arrays can be used to generate many combinations with minor variations.
